@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { VscSignIn } from "react-icons/vsc";
 
-export type TFormValues = { username: ""; password: "" };
+export type TFormValues = { username: ""; email: ""; password: "" };
 
 export function LoginForm({
   changeContent,
@@ -9,6 +10,7 @@ export function LoginForm({
 }) {
   const [formValues, setFormValues] = useState<TFormValues>({
     username: "",
+    email: "",
     password: "",
   });
 
@@ -29,12 +31,23 @@ export function LoginForm({
   }, []);
 
   return (
-    <form className="login-panel" onSubmit={handleSubmit}>
-      <input id="username" placeholder="username" onChange={handleChange} />
-      <input id="password" placeholder="password" onChange={handleChange} />
-      <button type="submit" className="submit-button">
-        submit
-      </button>
-    </form>
+    <form action="index.php" onSubmit={handleSubmit} className="login-panel">
+            <h1 className="titleH1">Welcome!</h1>
+            <p className="paragraph">Enter your credentials to log in:</p>
+
+            <label htmlFor="username" className="form-label">Username:</label>
+            <input type="text" name="username" id="username" className="form-control username" onChange={handleChange}  />
+
+            <label htmlFor="email" className="form-label">Email:</label>
+            <input type="email" name="email" id="email" className="form-control email" onChange={handleChange} />
+
+            <label htmlFor="password" className="form-label">Password:</label>
+            <input type="password" name="password" id="password" className="form-control password" onChange={handleChange} />
+
+            <div className="div-btn">
+                <button type="submit" className="btn">Sign in <VscSignIn className="icon"/></button>
+            </div>
+            
+        </form>
   );
 }
