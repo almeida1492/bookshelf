@@ -13,7 +13,7 @@ export function useFetchData() {
     fetch("https://rickandmortyapi.com/api/character/105")
       .then((res) => res.json())
       .then((data) => setRemoteData(data));
-  }, []);
+  },  []);
 
   return remoteData;
 }
