@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import "./app.css";
 import { Header } from "./components/Header";
 import { LoginForm, TFormValues } from "./components/LoginForm";
@@ -18,6 +18,19 @@ export function useFetchData() {
   return remoteData;
 }
 
+function reducer(state, action) {
+  const draft = { ...state };
+  switch (action.type) {
+    case "GO_TO_DASHBOARD":
+      draft.activity = "DASHBOARD";
+      break;
+    case "UPDATE_USERNAME":
+      draft.username = action.payload;
+      break;
+  }
+  return draft;
+}
+
 export function App(props: { title: string }) {
   // const [users, setUsers] = useState<TUsers[]>([]);
   // useEffect(() => {
@@ -26,9 +39,10 @@ export function App(props: { title: string }) {
   //     .then((users) => setUsers(users));
   // }, []);
 
-  const [state, setState] = useState<"LOGIN" | "DASHBOARD">("LOGIN");
-
-  const [username, setUsername] = useState("");
+  const [appState, dispatch] = useReducer(reducer, {
+    activity: "LOGIN",
+    username: "",
+  });
 
   const data = useFetchData();
 
@@ -36,14 +50,13 @@ export function App(props: { title: string }) {
     <div className="app">
       <Header title={props.title} />
       <div className="content">
-        {state === "DASHBOARD" ? (
-          <Dashboard username={username} />
+        {appState.activity === "DASHBOARD" ? (
+          <Dashboard username={appState.username} />
         ) : (
           <LoginForm
             changeContent={(values: TFormValues) => {
-              console.log(values);
-              setUsername(values.username);
-              setState("DASHBOARD");
+              dispatch({ type: "UPDATE_USERNAME", payload: values.username });
+              dispatch({ type: "GO_TO_DASHBOARD" });
             }}
           />
         )}
