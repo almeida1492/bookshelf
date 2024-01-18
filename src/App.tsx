@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import "./app.css";
 import "../public/style.css";
 import { VscSignIn } from "react-icons/vsc";
 import { Header } from "./components/Header";
 import { LoginForm, TFormValues } from "./components/LoginForm";
+import { SignUp } from "./components/SignUp";
 import { Dashboard } from "./components/Dashboard";
 import { Footer } from "./components/Footer";
 
@@ -29,38 +30,63 @@ export function App(props: { title: string }) {
   //     .then((users) => setUsers(users));
   // }, []);
 
-  const [state, setState] = useState<"LOGIN" | "DASHBOARD">("LOGIN");
+  function reducer(state: any, action: { type: any; payload: string; }) {
+    const draft = { ...state };
+    switch (action.type) {
+      case "GO_TO_DASHBOARD":
+        draft.activity = "DASHBOARD";
+        break;
+      case "GO_TO_SIGNUP":
+        draft.activity = "SIGNUP";
+        break;
+      case "UPDATE_USERNAME":
+        draft.username = action.payload;
+        break;
+    }
+    return draft;
+  }
 
-  const [username, setUsername] = useState("");
-
-  const [email, setEmail] = useState("");
-
-  const [password, setPassword] = useState("");
+  const [appState, dispatch] = useReducer(reducer, {
+    activity: "LOGIN",
+    username: "", 
+  });
 
   const data = useFetchData();
 
+  
   return (
     <div className="app">
       <Header title={props.title} />
-      
-      {state === "DASHBOARD" ? (
-          <Dashboard username={username} />
+      <div className="content">
+        {appState.activity === "DASHBOARD" ? (
+          <Dashboard username={appState.username} />
         ) : (
-          <LoginForm
+          <>
+
+          {/* <LoginForm
             changeContent={(values: TFormValues) => {
-              console.log(values);
-              setUsername(values.username);
-              setEmail(values.email);
-              setPassword(values.password);
-              if (values.email == "" || values.username == "" || values.password == ""){
-                alert('Try again. You must enter all the request credentials!')
-              } else {
-              
-                setState("DASHBOARD");}
+              dispatch({ type: "UPDATE_USERNAME", payload: values.username });
+              dispatch({
+                type: "GO_TO_DASHBOARD",
+                payload: ""
+              });
+                                  
             }}
-          />
+          />  */}
+
+          <SignUp
+            changeContent={(values: TFormValues) => {
+                dispatch({ type: "UPDATE_USERNAME", payload: values.username });
+                dispatch({
+                  type: "GO_TO_DASHBOARD",
+                  payload: ""
+                });
+              }}
+            />
+
+          </> 
         )}
-        
+      </div>
       <Footer />
     </div>
   );
