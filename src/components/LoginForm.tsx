@@ -11,8 +11,10 @@ export type TFormValues = { username: string; password: string };
 export type TFormErrors = TFormValues;
 
 export function LoginForm({
+  goToSignUp,
   changeContent,
 }: {
+  goToSignUp: () => void;
   changeContent: (credentials: TFormValues) => void;
 }) {
   const [formValues, setFormValues] = useState<TFormValues>({
@@ -99,6 +101,7 @@ export function LoginForm({
       <button type="submit" className="submit-button">
         submit
       </button>
+      <a onClick={() => goToSignUp()}>Sign up</a>
     </form>
   );
 }

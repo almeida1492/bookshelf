@@ -1,35 +1,35 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useContext, useReducer } from "react";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./app.css";
+import { Dashboard } from "./components/Dashboard";
+import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
 import { LoginForm, TFormValues } from "./components/LoginForm";
-import { Footer } from "./components/Footer";
-import { Dashboard } from "./components/Dashboard";
+import { PrivateRoute } from "./components/PrivateRoute";
+import { Signup } from "./components/Signup";
+import { useFetchData } from "./hooks/useFetchData";
+import { reducer } from "./state/reducer";
 
 type TUsers = { id: string; name: string; email: string };
 
-export function useFetchData() {
-  const [remoteData, setRemoteData] = useState();
-  useEffect(() => {
-    fetch("https://rickandmortyapi.com/api/character/105")
-      .then((res) => res.json())
-      .then((data) => setRemoteData(data));
-  }, []);
-
-  return remoteData;
-}
-
-function reducer(state, action) {
-  const draft = { ...state };
-  switch (action.type) {
-    case "GO_TO_DASHBOARD":
-      draft.activity = "DASHBOARD";
-      break;
-    case "UPDATE_USERNAME":
-      draft.username = action.payload;
-      break;
-  }
-  return draft;
-}
+const router = createBrowserRouter([
+  {
+    path: "/login",
+    element: <LoginForm />,
+  },
+  {
+    path: "/signup",
+    element: <Signup />,
+  },
+  {
+    path: "/",
+    element: (
+      <PrivateRoute>
+        <Dashboard />
+      </PrivateRoute>
+    ),
+  },
+]);
 
 export function App(props: { title: string }) {
   // const [users, setUsers] = useState<TUsers[]>([]);
@@ -50,16 +50,7 @@ export function App(props: { title: string }) {
     <div className="app">
       <Header title={props.title} />
       <div className="content">
-        {appState.activity === "DASHBOARD" ? (
-          <Dashboard username={appState.username} />
-        ) : (
-          <LoginForm
-            changeContent={(values: TFormValues) => {
-              dispatch({ type: "UPDATE_USERNAME", payload: values.username });
-              dispatch({ type: "GO_TO_DASHBOARD" });
-            }}
-          />
-        )}
+        <RouterProvider router={router} />
       </div>
       <Footer />
     </div>
