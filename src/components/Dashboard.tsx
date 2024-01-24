@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
+import { StateContext } from "../App";
 
-export function Dashboard({ username }: { username: string }) {
+export function Dashboard() {
+  const { username } = useContext(StateContext);
   return <div>Welcome {username}</div>;
 }

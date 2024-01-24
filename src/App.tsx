@@ -1,10 +1,17 @@
-import React, { useContext, useReducer } from "react";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import React, { createContext, useReducer } from "react";
+import {
+  BrowserRouter,
+  Route,
+  RouterProvider,
+  Routes,
+  createBrowserRouter,
+  useNavigate,
+} from "react-router-dom";
 import "./app.css";
 import { Dashboard } from "./components/Dashboard";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
-import { LoginForm, TFormValues } from "./components/LoginForm";
+import { LoginForm } from "./components/LoginForm/LoginForm";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { Signup } from "./components/Signup";
 import { useFetchData } from "./hooks/useFetchData";
@@ -12,15 +19,12 @@ import { reducer } from "./state/reducer";
 
 type TUsers = { id: string; name: string; email: string };
 
+export const StateContext = createContext<{
+  username: string;
+  dispatch: React.Dispatch<any>;
+} | null>(null);
+
 const router = createBrowserRouter([
-  {
-    path: "/login",
-    element: <LoginForm />,
-  },
-  {
-    path: "/signup",
-    element: <Signup />,
-  },
   {
     path: "/",
     element: (
@@ -28,6 +32,14 @@ const router = createBrowserRouter([
         <Dashboard />
       </PrivateRoute>
     ),
+  },
+  {
+    path: "/login",
+    element: <LoginForm />,
+  },
+  {
+    path: "/signup",
+    element: <Signup />,
   },
 ]);
 
@@ -39,10 +51,7 @@ export function App(props: { title: string }) {
   //     .then((users) => setUsers(users));
   // }, []);
 
-  const [appState, dispatch] = useReducer(reducer, {
-    activity: "LOGIN",
-    username: "",
-  });
+  const [appState, dispatch] = useReducer(reducer, { username: "" });
 
   const data = useFetchData();
 
@@ -50,7 +59,14 @@ export function App(props: { title: string }) {
     <div className="app">
       <Header title={props.title} />
       <div className="content">
-        <RouterProvider router={router} />
+        <StateContext.Provider
+          value={{
+            username: appState.username,
+            dispatch,
+          }}
+        >
+          <RouterProvider router={router} />
+        </StateContext.Provider>
       </div>
       <Footer />
     </div>
