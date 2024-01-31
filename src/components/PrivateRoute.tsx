@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export function PrivateRoute({ children }: { children: React.ReactNode }) {
-  const isAuthenticated = false;
+  const isAuthenticated = true;
   const navigate = useNavigate();
 
   useEffect(() => {

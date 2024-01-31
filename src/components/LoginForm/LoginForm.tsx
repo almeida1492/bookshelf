@@ -1,89 +1,62 @@
-import React, { useContext, useEffect, useState } from "react";
-import { CAMPO_OBBLIGATORIO } from "../labels";
+import { useFormik } from "formik";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { object, string } from "yup";
 import { StateContext } from "../../App";
-import { isEmptyString, validate } from "./validationUtils";
 import { ErrorMessage } from "../ErrorMessage";
+import { CAMPO_OBBLIGATORIO } from "../labels";
 
 export type TFormValues = { username: string; password: string };
 export type TFormErrors = TFormValues;
 
+export const validationSchema = object({
+  username: string().required(CAMPO_OBBLIGATORIO),
+  password: string().required(CAMPO_OBBLIGATORIO),
+});
+
 export function LoginForm() {
   const navigate = useNavigate();
+
   const { dispatch } = useContext(StateContext);
-  const [formValues, setFormValues] = useState<TFormValues>({
-    username: "",
-    password: "",
-  });
 
-  const [formErrors, setFormErrors] = useState<TFormErrors>({
-    username: "",
-    password: "",
-  });
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const errors = validate(formValues);
-
-    if (Object.keys(errors).length === 0) {
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      email: "",
+      age: null,
+      password: "",
+    },
+    validationSchema,
+    validateOnChange: true,
+    onSubmit: (values) => {
       dispatch({
         type: "UPDATE_USERNAME",
-        payload: formValues.username,
+        payload: values.username,
       });
       navigate("/");
-    } else {
-      setFormErrors(errors);
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const id = e.target.id;
-    setFormValues((prevState) => ({ ...prevState, [id]: value }));
-  };
-
-  const handleBlur = (e) => {
-    const value = e.target.value;
-    const id = e.target.id;
-    const isValueValid = isEmptyString(value);
-    if (!isValueValid) {
-      setFormErrors((prevState) => ({
-        ...prevState,
-        [id]: CAMPO_OBBLIGATORIO,
-      }));
-    } else {
-      setFormErrors((prevState) => ({
-        ...prevState,
-        [id]: "",
-      }));
-    }
-  };
-
-  useEffect(() => {
-    console.log("The component LoginForm was mounted");
-    return () => console.log("The component LoginForm was unmounted");
-  }, []);
+    },
+  });
 
   return (
-    <form className="login-panel" onSubmit={handleSubmit}>
+    <form className="login-panel" onSubmit={formik.handleSubmit}>
       <input
         id="username"
         placeholder="username"
-        onChange={handleChange}
-        onBlur={handleBlur}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
       />
-      {formErrors.username ? (
-        <ErrorMessage message={formErrors.username} />
+      {formik.errors.username && formik.touched.username ? (
+        <ErrorMessage message={formik.errors.username} />
       ) : null}
+
       <input
         id="password"
         placeholder="password"
-        onChange={handleChange}
-        onBlur={handleBlur}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
       />
-      {formErrors.password ? (
-        <ErrorMessage message={formErrors.password} />
+      {formik.errors.password && formik.touched.password ? (
+        <ErrorMessage message={formik.errors.password} />
       ) : null}
       <button type="submit" className="submit-button">
         submit
