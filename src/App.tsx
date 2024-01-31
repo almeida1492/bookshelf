@@ -4,6 +4,7 @@ import { Header } from "./components/Header";
 import { LoginForm, TFormValues } from "./components/LoginForm";
 import { Footer } from "./components/Footer";
 import { Dashboard } from "./components/Dashboard";
+import { LoginRegister } from "./components/LoginRegister";
 
 type TUsers = { id: string; name: string; email: string };
 
@@ -27,6 +28,9 @@ function reducer(state, action) {
     case "UPDATE_USERNAME":
       draft.username = action.payload;
       break;
+    case "REGISTER":
+      draft.activity = "REGISTER"
+      break
   }
   return draft;
 }
@@ -52,11 +56,15 @@ export function App(props: { title: string }) {
       <div className="content">
         {appState.activity === "DASHBOARD" ? (
           <Dashboard username={appState.username} />
-        ) : (
+        ):
+        appState.activity === "REGISTER" ? 
+        (
+          <LoginRegister />):
+        (
           <LoginForm
             changeContent={(values: TFormValues) => {
               dispatch({ type: "UPDATE_USERNAME", payload: values.username });
-              dispatch({ type: "GO_TO_DASHBOARD" });
+              dispatch({ type: "REGISTER" });
             }}
           />
         )}

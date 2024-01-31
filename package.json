@@ -1,7 +1,7 @@
 {
-  "name": "bookshelf-api",
+  "name": "server",
   "version": "1.0.0",
-  "description": "",
+  "description": "This repository contains a template of a React application and a SQLite database managed by Prisma. Both applications are served in two different ports. Then, the student can simulate server/client interactions with a REST or GraphQL API (Prisma makes both possible). The idea is to have a starting point for practicing data presentation, handling user input, submitting data to a server etc.",
   "main": "index.js",
   "scripts": {
     "start": "start-server-and-test db http://localhost:3000 app",
@@ -9,7 +9,7 @@
     "app": "parcel public/index.html"
   },
   "keywords": [],
-  "author": "",
+  "author": "yesi",
   "license": "ISC",
   "devDependencies": {
     "@parcel/packager-raw-url": "^2.9.3",
@@ -29,6 +29,11 @@
     "parcel": "^2.9.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "server": "^1.0.38",
     "start-server-and-test": "^2.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "Fiorella"
   }
 }
