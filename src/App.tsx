@@ -1,26 +1,45 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { createContext, useReducer } from "react";
 import "./app.css";
 import "../public/style.css";
 import { VscSignIn } from "react-icons/vsc";
 import { Header } from "./components/Header";
-import { LoginForm, TFormValues } from "./components/LoginForm";
-import { SignUp } from "./components/SignUp";
+import { LoginForm } from "./components/LoginForm/LoginForm";
+import { SignUp } from "./components/SignUp/SignUp";
 import { Dashboard } from "./components/Dashboard";
 import { Footer } from "./components/Footer";
+import { useFetchData } from "./hooks/useFetchData";
+import { reducer } from "./state/reducer";
+import { BrowserRouter, Route, Routes, RouterProvider, createBrowserRouter, useNavigate } from "react-router-dom";
+import { PrivateRoute } from "./components/PrivateRoute";
 
 
-type TUsers = { id: string; username: string; email: string; password: string };
+type TUsers = { id: string; name: string; username: string; email: string; password: string };
 
-export function useFetchData() {
-  const [remoteData, setRemoteData] = useState();
-  useEffect(() => {
-    fetch("https://rickandmortyapi.com/api/character/105")
-      .then((res) => res.json())
-      .then((data) => setRemoteData(data));
-  }, []);
+export const StateContext = createContext<{
+                              username: string;
+                              dispatch: React.Dispatch<any>;
+                            } | null>(null);
 
-  return remoteData;
-}
+// devo creare un'istanza del router. Dentro passo un array di oggetti con gli elementi che devo fare vedere.
+// CreateBrowserRouter: It uses the DOM History API to update the URL and manage the history stack.
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: (
+      <PrivateRoute>
+        <Dashboard />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/login",
+    element: <LoginForm />,
+  },
+  {
+    path: "/signup",
+    element: <SignUp />,
+  },
+]);
 
 export function App(props: { title: string }) {
   // const [users, setUsers] = useState<TUsers[]>([]);
@@ -30,62 +49,22 @@ export function App(props: { title: string }) {
   //     .then((users) => setUsers(users));
   // }, []);
 
-  function reducer(state: any, action: { type: any; payload: string; }) {
-    const draft = { ...state };
-    switch (action.type) {
-      case "GO_TO_DASHBOARD":
-        draft.activity = "DASHBOARD";
-        break;
-      case "GO_TO_SIGNUP":
-        draft.activity = "SIGNUP";
-        break;
-      case "UPDATE_USERNAME":
-        draft.username = action.payload;
-        break;
-    }
-    return draft;
-  }
+  const [appState, dispatch] = useReducer(reducer, { username: "" });
 
-  const [appState, dispatch] = useReducer(reducer, {
-    activity: "LOGIN",
-    username: "", 
-  });
+  // const data = useFetchData();
 
-  const data = useFetchData();
-
-  
   return (
     <div className="app">
       <Header title={props.title} />
       <div className="content">
-        {appState.activity === "DASHBOARD" ? (
-          <Dashboard username={appState.username} />
-        ) : (
-          <>
-
-          {/* <LoginForm
-            changeContent={(values: TFormValues) => {
-              dispatch({ type: "UPDATE_USERNAME", payload: values.username });
-              dispatch({
-                type: "GO_TO_DASHBOARD",
-                payload: ""
-              });
-                                  
+        <StateContext.Provider
+            value={{
+              username: appState.username,
+              dispatch,
             }}
-          />  */}
-
-          <SignUp
-            changeContent={(values: TFormValues) => {
-                dispatch({ type: "UPDATE_USERNAME", payload: values.username });
-                dispatch({
-                  type: "GO_TO_DASHBOARD",
-                  payload: ""
-                });
-              }}
-            />
-
-          </> 
-        )}
+        >
+          <RouterProvider router={router} />
+        </StateContext.Provider>
       </div>
       <Footer />
     </div>

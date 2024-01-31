@@ -79,18 +79,32 @@
 .register-access{
   font-size: 10px;
 }
+.col{
+  display: flex;
+  margin-block: 7px;
+}
 
 .riga-form-register, .riga-form-login {
   display: flex;
-  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
   gap: 10px;
   justify-content: center;
+  
  }
-
+ .riga-form-register{
+  width: 50%;
+ }
+ .riga-form-login {
+  flex-flow: row wrap;
+ }
+ 
 label{
   font-size: 10px;
- }
-input {
+  
+}
+
+input, select {
   font-size: 10px;
   width: 60%;
 }
