@@ -48,7 +48,6 @@ export function App(props: { title: string }) {
   return (
     <div className="app">
       <Header title={props.title} />
-      <div>Hello world!</div>
       <div className="content">
         <RouterProvider router={router} />
       </div>
