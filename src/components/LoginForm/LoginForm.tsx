@@ -3,8 +3,10 @@ import { VscSignIn } from "react-icons/vsc";
 import { REQUIRED_FIELD } from "../labels";
 import { useNavigate } from "react-router-dom";
 import { StateContext } from "../../App";
-import { isEmptyString, validate } from "./validationUtils";
 import { ErrorMessage } from "../ErrorMessage";
+import { useFormik } from "formik";
+import { validationSchema } from "./validationSchema";
+import Yup from "yup";
 
 
 export type TFormValues = { username: string; email: string; password: string };
@@ -12,68 +14,38 @@ export type TFormErrors = TFormValues;
 
 export function LoginForm() {
   const navigate = useNavigate();
+
   const { dispatch } = useContext(StateContext);
   
-  const [formValues, setFormValues] = useState<TFormValues>({
-    username: "",
-    email: "",
-    password: "",
-  });
-  
-  const [formErrors, setFormErrors] = useState<TFormErrors>({
-    username: "",
-    email: "",
-    password: "",
-  });
+   
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      email: "",
+      password: "", 
+    },
 
-  
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    validationSchema: validationSchema,
 
-    const errors = validate(formValues);
-    //prende tutte le keys di un oggetto
-    if (Object.keys(errors).length === 0) {
-      dispatch({
-        type: "UPDATE_USERNAME",
-        payload: formValues.username,
-      });
-      navigate("/");
-    } else {
-      setFormErrors(errors);
-    }
-  };
+    validateOnChange: true,
+
+    validateOnBlur: true, 
     
+    onSubmit: (values) => {
+        //ho messo quello che c'era su handleSubmit. Abbiamo eliminato validate (e quindi errors) perché quello lo gestisce direttamente formik   
+        dispatch({
+          type: "UPDATE_USERNAME",
+          payload: values.username,
+        });
+        navigate("/");
+      
+    },
+  });
+
   
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const id = e.target.id;
-    setFormValues((prevState) => ({ ...prevState, [id]: value }));
-  };
-
-    
-  const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const id = e.target.id;
-    const isValueValid = validate(formValues);
-    if (Object.keys(isValueValid).length === 0) {
-      dispatch({
-        type: "UPDATE_USERNAME",
-        payload: formValues.username,
-      });
-      navigate("/");
-    } else {
-      setFormErrors(isValueValid);
-    }
-  };
-          
-  useEffect(() => {
-    console.log("The component LoginForm was mounted");
-    return () => console.log("The component LoginForm was unmounted");
-  }, []);
-
   // questa è una funzione jsx
   return (
-    <form className="login-panel" onSubmit={handleSubmit}>
+    <form className="login-panel" onSubmit={formik.handleSubmit}>
             <h2 className="titleH2">Welcome!</h2>
             <p className="paragraph">Enter your credentials to log in:</p>
             
@@ -85,11 +57,11 @@ export function LoginForm() {
                 name="username" 
                 className="form-control username" 
                 placeholder="Enter your username" 
-                onChange={handleChange} 
-                onBlur = {handleBlur} 
+                onChange={formik.handleChange} 
+                onBlur = {formik.handleBlur} 
               />
-              {formErrors.username ? (
-                <ErrorMessage message={formErrors.username} /> 
+              {formik.errors.username && formik.touched.username ? (
+                <ErrorMessage message={formik.errors.username} isError={false} /> 
               ) : null}
             </div>
 
@@ -101,11 +73,11 @@ export function LoginForm() {
                  name="email"
                  className="form-control email"  
                  placeholder="Enter your email" 
-                 onChange={handleChange} 
-                 onBlur = {handleBlur} 
+                 onChange={formik.handleChange} 
+                 onBlur = {formik.handleBlur} 
               />
-              {formErrors.email ? (
-                <ErrorMessage message= {formErrors.email} />
+              {formik.errors.email && formik.touched.email ? (
+                <ErrorMessage message={formik.errors.email} isError={false} />
               ) : null}
             </div>
 
@@ -117,10 +89,10 @@ export function LoginForm() {
                 name="password"
                 className="form-control password" 
                 placeholder="Enter your password" 
-                onChange={handleChange} 
-                onBlur = {handleBlur} />
-              {formErrors.password ? (
-                <ErrorMessage message= {formErrors.password} /> 
+                onChange={formik.handleChange} 
+                onBlur = {formik.handleBlur} />
+              {formik.errors.password  && formik.touched.password ? (
+                <ErrorMessage message={formik.errors.password} isError={false} /> 
               ): null}
             </div>
 

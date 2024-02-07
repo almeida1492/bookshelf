@@ -112,3 +112,9 @@ input, select {
 .left {
   width: 25%;
 }
+
+.privacypolicyline{
+  display: flex;
+}
+
+
