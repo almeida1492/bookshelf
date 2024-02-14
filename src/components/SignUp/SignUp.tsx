@@ -1,4 +1,4 @@
-import React, { useState, useContext, Dispatch } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { StateContext } from "../../App";
 import { ErrorMessage } from "../ErrorMessage";
@@ -10,14 +10,18 @@ import { validationSchema } from "./validationSchema";
 import YUP, { date } from "yup";
 
 
-export type TFormValues = { name: string; lastname: string; gender: string; maritalstatus: string; age: string; phonenumber: string; birthdate: string; citizenship: string; linkedin: string; photo: string; username: string; email: string; password: string; confirmpassword: string; privacypolicy: boolean };
+// export type TFormValues = { name: string; lastname: string; gender: string; maritalstatus: string; age: string; phonenumber: string; birthdate: string; citizenship: string; linkedin: string; photo: string; username: string; email: string; password: string; confirmpassword: string; privacypolicy: boolean };
 
-export type TFormErrors = TFormValues;
+// export type TFormErrors = TFormValues;
 
 export function SignUp() {
   const navigate = useNavigate();
-
   const { dispatch } = useContext(StateContext);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [fileSizeError, setFileSizeError] = useState(false);
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];  
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -30,7 +34,7 @@ export function SignUp() {
       birthdate:"",
       citizenship: "",
       linkedin: "",
-      photo: {},
+      photo: "",
       username: "",
       email: "",
       password: "",
@@ -45,6 +49,7 @@ export function SignUp() {
     validateOnBlur: true, 
 
     onSubmit:(values) => {
+      values.photo = selectedFile ? selectedFile.name : "";
       dispatch({
         type: "UPDATE_USERNAME",
         payload: values.username,
@@ -52,8 +57,8 @@ export function SignUp() {
       navigate("/");
     },
   });
-    
-
+  
+  
   return (
     <form  className="login-panel" onSubmit= {formik.handleSubmit}>
       <h2 className="titleH2">Sign Up!</h2>
@@ -215,12 +220,14 @@ export function SignUp() {
             type="file"
             accept=".jpg, .jpeg, .png, .svg, .gif"
             className="form-control photo"  
-            onChange={formik.handleChange} 
-            onBlur = {formik.handleBlur} 
+            onChange={handleFileChange} 
+             
           />
-          {formik.errors.photo && formik.touched.photo ? (
+           {fileSizeError && <ErrorMessage message="File size exceeds the limit" isError={false} />}
+        
+          {/* {formik.errors.photo && formik.touched.photo ? (
             <ErrorMessage message={formik.errors.photo} isError={false} />
-            ) : null}
+            ) : null} */}
         </div>
 
       </div>

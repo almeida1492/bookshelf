@@ -1,14 +1,15 @@
-import { array, boolean, date, number, object, ref, string} from "yup";
+import { array, boolean, date, mixed, number, object, ref, string} from "yup";
 import { MATCH_PASSWORD, REQUIRED_FIELD } from "../labels";
+
 
 export const validationSchema = object({
     name: string().required(REQUIRED_FIELD),
     
     lastname: string().required(REQUIRED_FIELD),
     
-    gender: string<'Female' | 'Male' | 'Other' >().required(REQUIRED_FIELD),
+    gender: string().required(REQUIRED_FIELD),
     
-    maritalstatus: string<'Not married' | 'Married' | 'Common-law married' | 'Separeted' | 'Divorced' | 'Widowed'>().required(REQUIRED_FIELD), 
+    maritalstatus: string().required(REQUIRED_FIELD), 
     
     age: number().min(18, "Must be at least 18").required(REQUIRED_FIELD),
     
@@ -24,7 +25,7 @@ export const validationSchema = object({
         'Enter correct url!'
     ),
     
-    photo: array().required(REQUIRED_FIELD),
+    photo: string().required(REQUIRED_FIELD),
     
     username: string().required(REQUIRED_FIELD), 
     
@@ -36,4 +37,8 @@ export const validationSchema = object({
     
     privacypolicy: boolean().oneOf([true], "Must accept terms of use"),
 });
+
+
+
+
 

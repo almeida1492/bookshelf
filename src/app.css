@@ -1,3 +1,11 @@
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+img{
+  vertical-align: middle;
+}
 
 .app {
   background-color: cornflowerblue;
@@ -19,7 +27,8 @@
 .footer{
   position: absolute;
   bottom: 0;
-}
+} 
+
 .paragraph {
   font-size: 12px;
   text-align: left;
@@ -115,6 +124,73 @@ input, select {
 
 .privacypolicyline{
   display: flex;
+}
+h1 {
+  text-align: center;
+  margin-top: 20px;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-block: 50px;
+}
+
+.select-option {
+  display: flex;
+  gap: 10px;
+  font-size: 15px;
+  
+}
+
+.select-field{
+  width: 150px;
+  margin-bottom: 50px;
+  font-size: 14px;
+  border-radius: 5px;
+
+}
+.bookshelf {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 25px;
+  width: 90%;
+}
+
+img {
+  height: 200px;
+}
+
+.book {
+  width: 250px;
+  border: 1px solid rgb(12, 3, 108);
+  border-radius: 10px;
+  padding: 8px;
+  background-color: azure;
+  height: 400px;
+  
+}
+
+.book:hover{
+  cursor: pointer;
+  transform: scale(1.05);
+  filter: drop-shadow(8px 8px 10px blue);
+}
+
+
+.image-space{
+  text-align: center;
+  background-color: rgb(197, 215, 252);
+  border-radius: 10px;
+}
+
+.testo {
+  margin: 10px;
+}
+.cover {
+  object-fit: cover;
 }
 
 
