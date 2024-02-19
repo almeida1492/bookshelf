@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { CAMPO_OBBLIGATORIO } from "./labels";
+import { useNavigate } from "react-router-dom";
+import { StateContext } from "../App";
 
 function validateValue(value: string) {
   let isValid = true;
@@ -10,13 +12,11 @@ function validateValue(value: string) {
 export type TFormValues = { username: string; password: string };
 export type TFormErrors = TFormValues;
 
-export function LoginForm({
-  goToSignUp,
-  changeContent,
-}: {
-  goToSignUp: () => void;
-  changeContent: (credentials: TFormValues) => void;
-}) {
+export function LoginForm(){
+  const navigate = useNavigate();
+
+  const { dispatch } = useContext(StateContext);
+  
   const [formValues, setFormValues] = useState<TFormValues>({
     username: "",
     password: "",
@@ -46,7 +46,9 @@ export function LoginForm({
     }
 
     if (isUsernameValid && isPasswordValid) {
-      changeContent(formValues);
+      dispatch({ type: "UPDATE_USERNAME",
+      payload: formValues.username, });
+      navigate("/");
     }
   };
 
@@ -56,7 +58,7 @@ export function LoginForm({
     setFormValues((prevState) => ({ ...prevState, [id]: value }));
   };
 
-  const handleBlur = (e) => {
+  const handleBlur = (e: { target: { value: any; id: any; }; }) => {
     const value = e.target.value;
     const id = e.target.id;
     const isValueValid = validateValue(value);
@@ -92,6 +94,7 @@ export function LoginForm({
       <input
         id="password"
         placeholder="password"
+        type= "password"
         onChange={handleChange}
         onBlur={handleBlur}
       />
@@ -101,7 +104,7 @@ export function LoginForm({
       <button type="submit" className="submit-button">
         submit
       </button>
-      <a onClick={() => goToSignUp()}>Sign up</a>
+      <a onClick={() => navigate("/signup")}>Sign up</a>
     </form>
   );
 }

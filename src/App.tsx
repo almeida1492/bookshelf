@@ -1,5 +1,5 @@
-import React, { useContext, useReducer } from "react";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import React, { createContext, useContext, useReducer } from "react";
+import { BrowserRouter, Route, RouterProvider, Routes, createBrowserRouter, useNavigate } from "react-router-dom";
 import "./app.css";
 import { Dashboard } from "./components/Dashboard";
 import { Footer } from "./components/Footer";
@@ -9,27 +9,11 @@ import { PrivateRoute } from "./components/PrivateRoute";
 import { Signup } from "./components/Signup";
 import { useFetchData } from "./hooks/useFetchData";
 import { reducer } from "./state/reducer";
+import { type } from "os";
 
 type TUsers = { id: string; name: string; email: string };
 
-const router = createBrowserRouter([
-  {
-    path: "/login",
-    element: <LoginForm />,
-  },
-  {
-    path: "/signup",
-    element: <Signup />,
-  },
-  {
-    path: "/",
-    element: (
-      <PrivateRoute>
-        <Dashboard />
-      </PrivateRoute>
-    ),
-  },
-]);
+export const StateContext = createContext<{username: string} | null>(null);
 
 export function App(props: { title: string }) {
   // const [users, setUsers] = useState<TUsers[]>([]);
@@ -49,9 +33,31 @@ export function App(props: { title: string }) {
     <div className="app">
       <Header title={props.title} />
       <div className="content">
-        <RouterProvider router={router} />
-      </div>
-      <Footer />
+        <StateContext.Provider value={{...appState, dispatch}}>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={
+              <PrivateRoute>
+                <Dashboard username={appState.username} />
+              </PrivateRoute>} />
+              <Route
+                path="/login"
+                element={
+                <LoginForm
+                />}
+              />
+              
+              <Route path="/signup" element={<Signup
+                    changeContent={() => {
+                      dispatch({ type: "UPDATE_USERNAME" });
+                    } } /> 
+                  }
+              />
+            </Routes>
+          </BrowserRouter>
+        </StateContext.Provider>
+    </div>
+    <Footer />
     </div>
   );
 }

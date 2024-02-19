@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { StateContext } from "../App";
 
 export function Signup({ changeContent }: { changeContent: () => void }) {
+  const navigate = useNavigate();
+  const { dispatch } = useContext(StateContext);
   const [formValues, setFormValues] = useState({
     nome: "",
     cognome: "",
@@ -12,10 +16,11 @@ export function Signup({ changeContent }: { changeContent: () => void }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    changeContent();
+    dispatch ({ type: "UPDATE_USERNAME", payload: formValues.username })
+    navigate("/")
   };
 
-  const handleChange = () => {
+  const handleChange = (e) => {
     const value = e.target.value;
     const id = e.target.id;
     setFormValues((prevState) => ({ ...prevState, [id]: value }));
