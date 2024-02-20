@@ -53,3 +53,23 @@ td {
 .submit-button {
   cursor: pointer;
 }
+
+.error-message {
+  color: red;
+}
+
+.bookshelf {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.book {
+  width: 200px;
+  border: 1px solid black;
+  padding: 8px;
+}
+
+.cover {
+  margin: 16px;
+}
