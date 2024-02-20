@@ -1,34 +1,46 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useReducer } from "react";
 import "./app.css";
+import { BrowserRouter, Route, Routes, RouterProvider, createBrowserRouter, useNavigate } from "react-router-dom";
+import { VscSignIn } from "react-icons/vsc";
 import { Header } from "./components/Header";
-import { LoginForm, TFormValues } from "./components/LoginForm";
+import { LoginForm, TFormValues } from "./components/LoginForm/LoginForm";
 import { Footer } from "./components/Footer";
 import { Dashboard } from "./components/Dashboard";
+import { PrivateRoute } from "./components/PrivateRoute";
+import { Signup } from "./components/SignUp/SignUp";
+import { useFetchData } from "./hooks/UseFetchData";
+import { reducer } from "./state/reducer";
 
 type TUsers = { id: string; name: string; email: string };
 
-export function useFetchData() {
-  const [remoteData, setRemoteData] = useState();
-  useEffect(() => {
-    fetch("https://rickandmortyapi.com/api/character/105")
-      .then((res) => res.json())
-      .then((data) => setRemoteData(data));
-  }, []);
+export const StateContext = createContext<{
+  username: string;
+  dispatch: React.Dispatch<any>;
+} | null>(null);
 
-  return remoteData;
-}
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: (
+      <PrivateRoute>
+        <Dashboard />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/login",
+    element: <LoginForm />,
+  },
+  {
+    path: "/signup",
+    element: <Signup />,
+  },
+]);
 
 export function App(props: { title: string }) {
-  // const [users, setUsers] = useState<TUsers[]>([]);
-  // useEffect(() => {
-  //   fetch("http://localhost:3000/users")
-  //     .then((res) => res.json())
-  //     .then((users) => setUsers(users));
-  // }, []);
 
-  const [state, setState] = useState<"LOGIN" | "DASHBOARD">("LOGIN");
 
-  const [username, setUsername] = useState("");
+  const [appState, dispatch] = useReducer(reducer, { username: "" });
 
   const data = useFetchData();
 
@@ -36,17 +48,14 @@ export function App(props: { title: string }) {
     <div className="app">
       <Header title={props.title} />
       <div className="content">
-        {state === "DASHBOARD" ? (
-          <Dashboard username={username} />
-        ) : (
-          <LoginForm
-            changeContent={(values: TFormValues) => {
-              console.log(values);
-              setUsername(values.username);
-              setState("DASHBOARD");
-            }}
-          />
-        )}
+        <StateContext.Provider
+          value={{
+            username: appState.username,
+            dispatch,
+          }}
+        >
+          <RouterProvider router={router} />
+        </StateContext.Provider>
       </div>
       <Footer />
     </div>
