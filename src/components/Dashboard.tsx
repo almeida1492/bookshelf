@@ -35,8 +35,8 @@ export function Dashboard() {
   <p>Select a SRH professional:</p>
   <select className="select-field" value={selectedGenre} onChange={handleGenreChange}>
             <option value="">All</option>
-              {[options].sort().map(genre => (
-            <option value={genre} > {genre}</option>
+              {[...options].sort().map(genre => (
+            <option key={genre} value={genre} > {genre}</option>
             ))}
 
           </select>
