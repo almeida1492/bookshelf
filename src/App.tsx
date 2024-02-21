@@ -16,6 +16,7 @@ import { PrivateRoute } from "./components/PrivateRoute";
 import { Signup } from "./components/Signup";
 import { useFetchData } from "./hooks/useFetchData";
 import { reducer } from "./state/reducer";
+import { BookDetails } from "./components/BookDetails";
 
 type TUsers = { id: string; name: string; email: string };
 
@@ -30,6 +31,14 @@ const router = createBrowserRouter([
     element: (
       <PrivateRoute>
         <Dashboard />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/details",
+    element: (
+      <PrivateRoute>
+        <BookDetails />
       </PrivateRoute>
     ),
   },
