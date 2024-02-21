@@ -26,6 +26,6 @@ export const validationSchema = object({
     
     confirmpassword: string().required(REQUIRED_FIELD).oneOf([ref('password')], MATCH_PASSWORD),
     
-    termsconditions: boolean<false>().required(REQUIRED_FIELD_BOOLEAN),
+    termsconditions: boolean().oneOf([false], "Must accept terms of use")
 });
 

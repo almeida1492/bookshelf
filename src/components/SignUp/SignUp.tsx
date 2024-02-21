@@ -32,6 +32,7 @@ export function Signup() {
     email: "",
     password: "",
     confirmpassword: "",
+    termsconditions: true,
   },
 
   validationSchema: validationSchema,
@@ -253,14 +254,28 @@ export function Signup() {
 
     <div className="col">
     <div className="riga-form-register">
-    <input id="termsconditions" type="checkbox" name="generic" /> I've read the <a href="#">Privacy Policy</a> and 
+    <input id="termsconditions" type="checkbox" name="generic"
+      onChange={formik.handleChange} 
+      onBlur = {formik.handleBlur} 
+    />
+    I've read the <a href="#">Privacy Policy</a> and 
 accept the <a href="#">Terms and Conditions</a>
+
+{formik.errors.termsconditions  && formik.touched.termsconditions ? (
+            <ErrorMessage message={formik.errors.termsconditions} isError={false} />  
+            ) : null}
+
 </div>
 
 
 
 <div className="riga-form-register">
-  <input type="checkbox" name="newsletter" /> Send me information about products, services, 
+  <input type="checkbox" name="newsletter" 
+  onChange={formik.handleChange} 
+  onBlur = {formik.handleBlur} 
+/>
+  
+  Send me information about products, services, 
 deals or recommendations by email (optional)
 </div>
 </div>
