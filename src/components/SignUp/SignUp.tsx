@@ -46,21 +46,22 @@ export function Signup() {
       type: "UPDATE_USERNAME", payload: values.username,
     });
 
-    fetch("https://jsonplaceholder.typicode.com/posts/1", {
-      method:"DELETE",
-
-  
-    }
-    
-    );
+    fetch ("https://jsonplaceholder.typicode.com/posts", 
+    {
+      method: "POST",
+      body: JSON.stringify(values),
+     });
 
     navigate("/");
-  },
+  }});
 
-  });
+  
+
+  
 
 
   return (
+
     <form 
     id="contact-form"
     className="login-panel" onSubmit={formik.handleSubmit}>
@@ -231,6 +232,7 @@ export function Signup() {
           id="password"
           className="form-control password"
           placeholder="Enter your password"
+          type="password"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur} />
         {formik.errors.password && formik.touched.password ? (
@@ -244,6 +246,7 @@ export function Signup() {
           id="confirmpassword"
           className="form-control confirmpassword"
           placeholder="Enter your password"
+          type="password"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur} />
         {formik.errors.confirmpassword && formik.touched.confirmpassword ? (

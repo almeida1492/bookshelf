@@ -1,5 +1,6 @@
-import React, { useContext, useEffect, useMemo, useState, } from "react";
+import React, { useContext, useEffect, useMemo, useState, ChangeEvent } from "react";
 import { StateContext } from "../App";
+import { LoginForm } from "./LoginForm/LoginForm";
 
 type TData = {cover_image:string; title: string; author: string; publication_year: string; genre: string; description: string }
 
@@ -36,7 +37,7 @@ export function Dashboard() {
   <select className="select-field" value={selectedGenre} onChange={handleGenreChange}>
             <option value="">All</option>
               {[...options].sort().map(genre => (
-            <option key={genre} value={genre} > {genre}</option>
+            <option key={genre} value={genre} > {genre} </option>
             ))}
 
           </select>

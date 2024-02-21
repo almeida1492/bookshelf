@@ -73,6 +73,7 @@ const formik = useFormik({
         <input
           id="password"
           placeholder="password"
+          type="password"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
         />
