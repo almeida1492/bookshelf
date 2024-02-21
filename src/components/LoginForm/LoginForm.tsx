@@ -1,24 +1,24 @@
 import { useFormik } from "formik";
-import React, { useContext } from "react";
-import { object, string } from "yup";
+import React, { useContext, useState } from "react";
+import { object, string, date } from "yup";
 import { StateContext } from "../../App";
 import { ErrorMessage } from "../ErrorMessage";
-import { CAMPO_OBBLIGATORIO } from "../labels";
-import { BrowserRouter, Route, RouterProvider, Routes, createBrowserRouter, useNavigate } from "react-router-dom";
+import { CAMPO_OBBLIGATORIO, REQUIRED_FIELD, REQUIRED_FIELD_BOOLEAN } from "../labels";
+import { validationSchema } from "./ValidationSchema";
+import { BrowserRouter, Route, RouterProvider, Routes, 
+  createBrowserRouter, useNavigate } from "react-router-dom";
 
 
 
-export type TFormValues = { username: string; password: string };
-export type TFormErrors = TFormValues;
+// export type TFormValues = { username: string; password: string; termsofuse: checkbox };
+// export type TFormErrors = TFormValues;
 
-export const validationSchema = object({
-  username: string().required(CAMPO_OBBLIGATORIO),
-  password: string().required(CAMPO_OBBLIGATORIO),
-});
+
 
 
 export function LoginForm() {
 const navigate = useNavigate();
+
 
 const { dispatch } = useContext(StateContext);
   
@@ -28,10 +28,11 @@ const formik = useFormik({
     username: "",
     email: "",
     password: "", 
+    termsofuse: true,
   },
 
 
-  validationSchema,
+  validationSchema: validationSchema,
   validateOnChange: true,
   validateOnBlur: true, 
 
@@ -78,6 +79,23 @@ const formik = useFormik({
         {formik.errors.password && formik.touched.password ? (
           <ErrorMessage message={formik.errors.password} isError={false} />
         ) : null}
+</div>
+
+<div className="checkbox-login">
+
+<label htmlFor="termsofuse" className="form-label-termsofuse">I accept the terms of use</label>
+
+<input
+id="checkbox-login"
+type="checkbox"
+onChange={formik.handleChange}
+onBlur={formik.handleBlur}
+/>
+
+{formik.errors.termsofuse  && formik.touched.termsofuse ? (
+            <ErrorMessage message={formik.errors.termsofuse} isError={false} />  
+            ) : null}
+
 </div>
     
       
