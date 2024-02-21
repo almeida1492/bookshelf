@@ -1,7 +1,6 @@
 import React, { createContext, useReducer } from "react";
 import "./app.css";
 import { BrowserRouter, Route, Routes, RouterProvider, createBrowserRouter, useNavigate } from "react-router-dom";
-import { VscSignIn } from "react-icons/vsc";
 import { Header } from "./components/Header";
 import { LoginForm, TFormValues } from "./components/LoginForm/LoginForm";
 import { Footer } from "./components/Footer";
@@ -49,14 +48,16 @@ export function App(props: { title: string }) {
       <Header title={props.title} />
       <div className="content">
         <StateContext.Provider
-          value={{
-            username: appState.username,
-            dispatch,
-          }}
-        >
-          <RouterProvider router={router} />
+          value={{username: appState.username, dispatch, }}>
+         
+         <RouterProvider router={router} />
         </StateContext.Provider>
-      </div>
+    </div>
+
+
+          
+       
+     
       <Footer />
     </div>
   );

@@ -3,10 +3,11 @@ import { BrowserRouter, Route, RouterProvider, Routes, createBrowserRouter, useN
 import { StateContext } from "../../App";
 import { ErrorMessage } from "../ErrorMessage";
 import { GiArchiveRegister } from "react-icons/gi";
+import { REQUIRED_FIELD_BOOLEAN } from "../labels";
 import { REQUIRED_FIELD } from "../labels";
 import { MATCH_PASSWORD } from "../labels";
 import { Form, useFormik } from "formik";
-import { validationSchema } from "./validationSchema";
+import { validationSchema } from "./ValidationSchema";
 import { object, string, date } from "yup";
 import YUP from "yup";
 
@@ -44,6 +45,14 @@ export function Signup() {
       type: "UPDATE_USERNAME", payload: values.username,
     });
 
+    fetch("https://jsonplaceholder.typicode.com/posts/1", {
+      method:"DELETE",
+
+  
+    }
+    
+    );
+
     navigate("/");
   },
 
@@ -75,11 +84,11 @@ export function Signup() {
         </div>
 
         <div className="riga-form-register">
-          <label htmlFor="lastname" className="form-label left">Last Name:</label>
+          <label htmlFor="lastname" className="form-label left">Lastname:</label>
           <input
             id="lastname"
             className="form-control lastname"
-            placeholder="Enter your last name"
+            placeholder="Enter your lastname"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur} />
           {formik.errors.lastname && formik.touched.lastname ? (
@@ -244,7 +253,7 @@ export function Signup() {
 
     <div className="col">
     <div className="riga-form-register">
-    <input type="checkbox" name="generic" /> I've read the <a href="#">Privacy Policy</a> and 
+    <input id="termsconditions" type="checkbox" name="generic" /> I've read the <a href="#">Privacy Policy</a> and 
 accept the <a href="#">Terms and Conditions</a>
 </div>
 

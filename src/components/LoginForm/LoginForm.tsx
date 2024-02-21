@@ -1,9 +1,7 @@
 import { useFormik } from "formik";
-import { VscSignIn } from "react-icons/vsc";
 import React, { useContext } from "react";
 import { object, string } from "yup";
 import { StateContext } from "../../App";
-import { GiArchiveRegister } from "react-icons/gi";
 import { ErrorMessage } from "../ErrorMessage";
 import { CAMPO_OBBLIGATORIO } from "../labels";
 import { BrowserRouter, Route, RouterProvider, Routes, createBrowserRouter, useNavigate } from "react-router-dom";
@@ -84,7 +82,7 @@ const formik = useFormik({
     
       
         <div className="div-btn">
-                <button type="submit" className="btn">Log in <VscSignIn className="icon"/></button>
+                <button type="submit" className="btn">Log in</button>
             </div>
             
             <div className="register-access">

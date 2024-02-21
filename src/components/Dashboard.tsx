@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState, } from "react";
 import { StateContext } from "../App";
 
 type TData = {cover_image:string; title: string; author: string; publication_year: string; genre: string; description: string }
@@ -35,11 +35,12 @@ export function Dashboard() {
   <p>Select a SRH professional:</p>
   <select className="select-field" value={selectedGenre} onChange={handleGenreChange}>
             <option value="">All</option>
-              {[...new Set(data.flatMap(item => item.genre))].sort().map(genre => (
-            <option key={genre} value={genre} >{genre}</option>
+              {[options].sort().map(genre => (
+            <option value={genre} > {genre}</option>
             ))}
 
           </select>
+
         </div>
 
 
@@ -50,7 +51,7 @@ export function Dashboard() {
     <div className="book">
 
       <div className="image-space">
-        <img className="cover" src={item.cover_image}  />
+        <img className="book-cover" src={item.cover_image}  />
       </div>
 
       <div>
