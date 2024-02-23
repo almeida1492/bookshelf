@@ -41,10 +41,10 @@ const router = createBrowserRouter([
     element: <Signup />,
   },
 
-{
-  path: "/book/:id",
-  element: <BookDetails />
-}
+  {
+    path: "/book",
+    element: <PrivateRoute><BookDetails /></PrivateRoute>
+  }
 
 
 ]);
@@ -61,16 +61,16 @@ export function App(props: { title: string }) {
       <Header title={props.title} />
       <div className="content">
         <StateContext.Provider
-          value={{username: appState.username, dispatch, }}>
-         
-         <RouterProvider router={router} />
+          value={{ username: appState.username, dispatch, }}>
+
+          <RouterProvider router={router} />
         </StateContext.Provider>
-    </div>
+      </div>
 
 
-          
-       
-     
+
+
+
       <Footer />
     </div>
   );
