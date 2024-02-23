@@ -53,7 +53,6 @@ export function BookDetails() {
         </>
       )}
 
-
       <div className="return-btn">
         <div className="div-btn">
           <button type="submit" className="btn">
@@ -62,15 +61,9 @@ export function BookDetails() {
         </div>
       </div>
 
-
-
     </div>
 
-
   );
-
-
-
 
 
 
