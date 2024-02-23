@@ -1,40 +1,52 @@
-import React, { Fragment, useEffect, useState } from "react";
-import ReactDOM from "react-dom/client";
+import React, { Fragment, useEffect, useState, } from "react";
 import {
   useLocation, useNavigate, useParams,
 } from "react-router-dom";
 
-
-type TData = { id: string; cover_image: string; title: string; author: string; publication_year: string; genre: string; description: string }
-
 export function BookDetails() {
-
 
   const navigate = useNavigate();
   const { search } = useLocation();
   const query = new URLSearchParams(search);
-  const [book, setBook] = useState<TData[]>([]);
+  const [book, setBook] = useState();
+  const [status, setStatus] = useState<
+    "IDLE" | "LOADING" | "SUCCESS" | "ERROR"
+  >("IDLE");
 
 
   useEffect(() => {
+    setStatus("LOADING");
     fetch(`https://freetestapi.com/api/v1/books/${query.get("id")}`)
-      .then((res) => res.json())
-      .then((data) => setBook(data));
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        }
+        throw new Error("Something went wrong");
+      })
+      .then((data) => {
+        setStatus("SUCCESS");
+        setBook(data);
+      })
+      .catch((err) => {
+        setStatus("ERROR");
+        console.error(err);
+      });
   }, []);
 
   return (
     <div className="container">
-      <h1> Book #{book.id} </h1>
+
 
       {book !== undefined && (
         <>
+          <h1> Book #{book.id} </h1>
           <div className="book">
             <div className="image-space">
               <img className="book-cover" src={book.cover_image} />
             </div>
             <ul>
               <div className="testo">
-                <b> Titolo:</b> {book.title}
+                <b>Titolo:</b> {book.title}
               </div>
               <div className="testo">
                 <b>Autore:</b> {book.author}
@@ -43,7 +55,11 @@ export function BookDetails() {
                 <b>Anno:</b> {book.publication_year}
               </div>
               <div className="testo">
-                <b>Genere:</b> {book.genre},
+                <b>Genere:</b>
+                {book.genre?.map((item) => (
+                  <li>{book.genre}</li>
+
+                ))}
               </div>
               <div className="testo">
                 <b>Descrizione:</b> {book.description}
