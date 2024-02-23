@@ -36,38 +36,50 @@ export function BookDetails() {
   return (
     <div className="container">
 
-
-      {book !== undefined && (
+      {status === "SUCCESS" ? (
         <>
-          <h1> Book #{book.id} </h1>
-          <div className="book">
-            <div className="image-space">
-              <img className="book-cover" src={book.cover_image} />
-            </div>
-            <ul>
-              <div className="testo">
-                <b>Titolo:</b> {book.title}
-              </div>
-              <div className="testo">
-                <b>Autore:</b> {book.author}
-              </div>
-              <div className="testo">
-                <b>Anno:</b> {book.publication_year}
-              </div>
-              <div className="testo">
-                <b>Genere:</b>
-                {book.genre?.map((item) => (
-                  <li>{book.genre}</li>
 
-                ))}
+          {book !== undefined && (
+            <>
+              <h1> Book #{book.id} </h1>
+              <div className="book">
+                <div className="image-space">
+                  <img className="book-cover" src={book.cover_image} />
+                </div>
+
+                <div className="testo">
+                  <b>Titolo:</b> {book.title}
+                </div>
+                <div className="testo">
+                  <b>Autore:</b> {book.author}
+                </div>
+                <div className="testo">
+                  <b>Anno:</b> {book.publication_year}
+                </div>
+                <div className="testo">
+                  <b>Genere:</b>
+                  {book.genre?.map((item) => (
+                    <li>{book.genre}</li>))}
+                </div>
+                <div className="testo">
+                  <b>Descrizione:</b> {book.description}
+                </div>
+
               </div>
-              <div className="testo">
-                <b>Descrizione:</b> {book.description}
-              </div>
-            </ul>
-          </div>
+            </>
+          )
+
+
+          }
         </>
-      )}
+      ) : status === "ERROR" ? (
+
+        <div>Ops...something went wrong</div>
+
+      ) : status === "LOADING" ? (
+        <div> LOADING...</div>
+      ) : null}
+
 
       <div className="return-btn">
         <div className="div-btn">
