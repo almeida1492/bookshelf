@@ -67,10 +67,8 @@ export function BookDetails() {
 
               </div>
             </>
-          )
+          )}
 
-
-          }
         </>
       ) : status === "ERROR" ? (
 
@@ -92,13 +90,5 @@ export function BookDetails() {
     </div>
 
   );
-
-
-
-
-
-
-
-
 
 }
