@@ -75,7 +75,7 @@ export function BookDetails() {
         <div>Ops...something went wrong</div>
 
       ) : status === "LOADING" ? (
-        <div> LOADING...</div>
+        <div className="loader"> <p className="loader-text">LOADING...</p></div>
       ) : null}
 
 
