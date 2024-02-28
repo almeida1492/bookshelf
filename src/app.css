@@ -72,3 +72,35 @@ td {
 .cover {
   margin: 16px;
 }
+
+.comment {
+  display: flex;
+  flex-direction: column;
+  margin: 16px;
+  gap: 16px;
+  border: 1px solid black;
+  padding: 16px;
+}
+
+.comment_name {
+  font-size: larger;
+}
+
+.comment_email {
+  font-weight: bold;
+}
+
+.new_comment_form {
+  display: flex;
+  flex-direction: column;
+  margin: 16px;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.submit_button {
+  width: 300px;
+  align-self: center;
+  height: 50px;
+  cursor: pointer;
+}
