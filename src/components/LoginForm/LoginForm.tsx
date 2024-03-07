@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { object, string } from "yup";
 import { StateContext } from "../../App";
@@ -16,8 +16,13 @@ export const validationSchema = object({
 
 export function LoginForm() {
   const navigate = useNavigate();
-
+  const [errorMessage, setErrorMessage] = useState("");
   const { dispatch } = useContext(StateContext);
+
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) navigate("/");
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -29,11 +34,23 @@ export function LoginForm() {
     validationSchema,
     validateOnChange: true,
     onSubmit: (values) => {
-      dispatch({
-        type: "UPDATE_USERNAME",
-        payload: values.username,
-      });
-      navigate("/");
+      fetch("https://dummyjson.com/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: values.username,
+          password: values.password,
+        }),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.token) {
+            localStorage.setItem("jwt", res.token);
+            navigate("/");
+          } else {
+            setErrorMessage(res.message);
+          }
+        });
     },
   });
 
@@ -61,6 +78,7 @@ export function LoginForm() {
       <button type="submit" className="submit-button">
         submit
       </button>
+      <ErrorMessage message={errorMessage} />
       <a onClick={() => navigate("/signup")}>Sign up</a>
     </form>
   );
